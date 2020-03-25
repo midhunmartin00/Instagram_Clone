@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
   public void startnewactivity(){
     Intent intent=new Intent(getApplicationContext(),UserList.class);
     startActivity(intent);
+    finish();
   }
   public void signup(View view){
     if(signup) {
@@ -104,6 +105,7 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
 
     if(ParseUser.getCurrentUser()!=null)
       startnewactivity();
+
     password.setOnKeyListener(this);
     textView.setOnClickListener(new View.OnClickListener() {
       @Override

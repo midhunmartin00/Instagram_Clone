@@ -12,7 +12,8 @@
         android:allowBackup="true"
         android:icon="@mipmap/instagram"
         android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar">
-        <activity android:name=".UserList"></activity>
+        <activity android:name=".UserFeed"></activity>
+        <activity android:name=".UserList" />
         <activity
             android:name=".MainActivity"
             android:label="Instagram Clone">
