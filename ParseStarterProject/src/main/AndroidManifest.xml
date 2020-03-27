@@ -12,7 +12,10 @@
         android:allowBackup="true"
         android:icon="@mipmap/instagram"
         android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar">
-        <activity android:name=".UserFeed"></activity>
+        <activity
+            android:name=".userActivity"
+            android:label="@string/title_activity_user"></activity>
+        <activity android:name=".UserFeed" />
         <activity android:name=".UserList" />
         <activity
             android:name=".MainActivity"
