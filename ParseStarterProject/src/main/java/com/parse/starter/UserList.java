@@ -85,8 +85,8 @@ public class UserList extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_list);
         setTitle("User feed");
-//        Intent intent=new Intent(getApplicationContext(),userActivity.class);
-//        startActivity(intent);
+        Intent intent=new Intent(getApplicationContext(),userActivity.class);
+        startActivity(intent);
 
         listView=findViewById(R.id.listview);
         final ArrayAdapter<String> adapter=new ArrayAdapter<String >(this,android.R.layout.simple_spinner_dropdown_item,arrayList);
