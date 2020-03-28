@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
   ImageView imageView;
   Boolean signup=true;
   public void startnewactivity(){
-    Intent intent=new Intent(getApplicationContext(),UserList.class);
+    Intent intent=new Intent(getApplicationContext(),userActivity.class);
     startActivity(intent);
     finish();
   }
