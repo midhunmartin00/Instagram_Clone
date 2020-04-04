@@ -11,6 +11,7 @@ import android.support.v4.app.Fragment;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 
+import com.parse.ParseUser;
 import com.parse.starter.R;
 
 public class NotificationsFragment extends Fragment {
@@ -22,6 +23,8 @@ public class NotificationsFragment extends Fragment {
 //        notificationsViewModel =
 //                ViewModelProviders.of(this).get(NotificationsViewModel.class);
         View root = inflater.inflate(R.layout.fragment_notifications, container, false);
+        TextView textView=root.findViewById(R.id.textView3);
+        textView.setText(ParseUser.getCurrentUser().getUsername().toString());
 //        final TextView textView = root.findViewById(R.id.text_notifications);
 //        notificationsViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
 //            @Override
