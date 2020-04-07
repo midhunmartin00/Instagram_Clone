@@ -27,6 +27,7 @@ import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
+import com.theartofdev.edmodo.cropper.CropImage;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -43,8 +44,10 @@ import java.util.Objects;
 public class buttonActivity extends AppCompatActivity {
 
     public void getPhoto(){
-        Intent intent= new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(intent,1);
+        Uri imageUri=null;
+        CropImage.activity(imageUri)
+                .setAspectRatio(16,11)
+                .start(this);
     }
 
     @Override
@@ -101,8 +104,9 @@ public class buttonActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode==1 && resultCode==RESULT_OK && data!=null){
-            Uri image=data.getData();
+        if(requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE && resultCode==RESULT_OK && data!=null){
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            Uri image=result.getUri();
             try {
                 Bitmap bitmap=MediaStore.Images.Media.getBitmap(this.getContentResolver(),image);
                 Log.i("Success", "onActivityResult: ");
