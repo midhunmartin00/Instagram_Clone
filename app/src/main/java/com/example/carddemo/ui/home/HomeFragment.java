@@ -17,6 +17,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -67,7 +68,7 @@ public class HomeFragment extends Fragment {
                                         Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
                                         try {
                                             DisplayMetrics metrics = Resources.getSystem().getDisplayMetrics();
-                                            float px = 10 * (metrics.densityDpi / 160f);
+                                            float px = 5 * (metrics.densityDpi / 160f);
                                             LayoutInflater layoutInflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                                             View view = layoutInflater.inflate(R.layout.format_layout, null);
 
@@ -79,7 +80,7 @@ public class HomeFragment extends Fragment {
 
                                             imageView.setMaxHeight(imageView.getWidth());
                                             imageView.setMinimumHeight(imageView.getWidth());
-                                            CardView.LayoutParams layoutParams = new CardView.LayoutParams(CardView.LayoutParams.MATCH_PARENT, CardView.LayoutParams.WRAP_CONTENT);
+                                            ConstraintLayout.LayoutParams layoutParams = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT);
                                             layoutParams.setMargins(0, (int) px, 0, 0);
                                             view.setLayoutParams(layoutParams);
                                             linearLayout.addView(view);
