@@ -26,6 +26,7 @@ import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.LogInCallback;
 import com.parse.Parse;
+import com.parse.ParseACL;
 import com.parse.ParseAnalytics;
 import com.parse.ParseAnonymousUtils;
 import com.parse.ParseException;
@@ -56,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
       if (username.getText().toString().equals("") || password.getText().toString().equals(""))
         Toast.makeText(this, "Username or password missing", Toast.LENGTH_SHORT).show();
       else {
-        ParseUser user = new ParseUser();
+        final ParseUser user = new ParseUser();
         user.setUsername(username.getText().toString());
         user.setPassword(password.getText().toString());
         user.signUpInBackground(new SignUpCallback() {
@@ -64,6 +65,7 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
           public void done(ParseException e) {
             if (e == null) {
               Log.i("result", "Success");
+              ParseACL parseACL=new ParseACL(user);
               startnewactivity();
 
             } else {

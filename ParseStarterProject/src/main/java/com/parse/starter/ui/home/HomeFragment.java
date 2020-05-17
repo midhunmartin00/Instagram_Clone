@@ -88,7 +88,7 @@ public class HomeFragment extends Fragment {
                                             view.setLayoutParams(layoutParams);
                                             linearLayout.addView(view);
                                         }catch (Exception e1){
-                                            Log.i("error", e.getMessage());
+                                            Log.i("error", e1.getMessage());
                                             e1.printStackTrace();
                                         }
                                     }else{

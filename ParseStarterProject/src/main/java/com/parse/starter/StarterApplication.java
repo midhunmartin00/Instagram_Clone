@@ -25,15 +25,15 @@ public class StarterApplication extends Application {
   public void onCreate() {
     super.onCreate();
 
-    //1a9PceTvQuUb
+//      gFZvFAWgcai4
     // Enable Local Datastore.
     Parse.enableLocalDatastore(this);
 
     // Add your initialization code here
     Parse.initialize(new Parse.Configuration.Builder(getApplicationContext())
-            .applicationId("")
-            .clientKey("")
-            .server("")
+            .applicationId("myappID")
+            .clientKey("gFZvFAWgcai4")
+            .server("http://13.234.59.178/parse/")
             .build()
     );
 
