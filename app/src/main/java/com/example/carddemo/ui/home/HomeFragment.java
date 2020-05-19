@@ -53,7 +53,7 @@ public class HomeFragment extends Fragment {
         ParseQuery<ParseObject> query=ParseQuery.getQuery("image");
         query.whereNotEqualTo("username", ParseUser.getCurrentUser().getUsername());
         query.orderByDescending("username");
-        Log.i("success", "done: ");
+        Log.i("success", ParseUser.getCurrentUser().getUsername());
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> objects, ParseException e) {
@@ -96,6 +96,10 @@ public class HomeFragment extends Fragment {
                             });
                         }
                     }
+                    Log.i("error", "empty");
+                }
+                else{
+                    Log.i("error",e.getMessage());
                 }
             }
         });

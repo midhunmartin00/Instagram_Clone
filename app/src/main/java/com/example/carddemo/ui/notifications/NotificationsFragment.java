@@ -32,6 +32,9 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import java.io.BufferedInputStream;
+import java.io.InputStream;
+import java.util.Arrays;
 import java.util.List;
 
 public class NotificationsFragment extends Fragment {
@@ -45,6 +48,7 @@ public class NotificationsFragment extends Fragment {
     private ImageView imageView2;
     private ImageView imageView3;
     private CardView cardView;
+    private int temp=0;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -65,7 +69,7 @@ public class NotificationsFragment extends Fragment {
         linearLayout=root.findViewById(R.id.linearLayout);
         ParseQuery<ParseObject> query=ParseQuery.getQuery("image");
         query.whereEqualTo("username",ParseUser.getCurrentUser().getUsername());
-        query.orderByDescending("createdAt");
+        query.orderByAscending("createdAt");
         count=0;
         layoutInflater= (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         format=layoutInflater.inflate(R.layout.grid_layout,null);
@@ -77,36 +81,80 @@ public class NotificationsFragment extends Fragment {
             public void done(List<ParseObject> objects, ParseException e) {
                 if(e==null) {
                     if (objects.size() > 0) {
+                        int j=0;
+//                        temp=0;
                         for (ParseObject ob : objects) {
                             ParseFile parseFile = ob.getParseFile("image");
+                            Log.i("file", parseFile.toString());
+//                            j=temp;
                             try {
-                                byte[] data=parseFile.getData();
-                                Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+                                assert parseFile != null;
+                                InputStream in= parseFile.getDataStream();
+                                BufferedInputStream bufferedInputStream=new BufferedInputStream(in);
+                                Bitmap bitmap=BitmapFactory.decodeStream(bufferedInputStream);
                                 count++;
-                                if(count==4){
+                                if (count == 4) {
                                     linearLayout.addView(format);
-                                    count=1;
-                                    layoutInflater= (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                                    format=layoutInflater.inflate(R.layout.grid_layout,null);
-                                    imageView1=format.findViewById(R.id.imageView2);
-                                    imageView2=format.findViewById(R.id.imageView3);
-                                    imageView3=format.findViewById(R.id.imageView4);
+                                    count = 1;
+                                    layoutInflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                                    format = layoutInflater.inflate(R.layout.grid_layout, null);
+                                    imageView1 = format.findViewById(R.id.imageView2);
+                                    imageView2 = format.findViewById(R.id.imageView3);
+                                    imageView3 = format.findViewById(R.id.imageView4);
                                 }
-                                if(count==1) {
+                                if (count == 1) {
                                     imageView1.setImageBitmap(bitmap);
                                     Log.i("success", "done:1");
-                                }
-                                else if(count==2) {
+                                } else if (count == 2) {
                                     imageView2.setImageBitmap(bitmap);
                                     Log.i("success", "done:2");
-                                }
-                                else {
+                                } else {
                                     imageView3.setImageBitmap(bitmap);
                                     Log.i("success", "done:3");
                                 }
 
-                            } catch (ParseException ex) {
-                                ex.printStackTrace();
+                                /*
+                                parseFile.getDataInBackground(new GetDataCallback() {
+                                    @Override
+                                    public void done(byte[] data, ParseException e) {
+                                        if(e==null) {
+                                            Log.i("data", Arrays.toString(data));
+                                            Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+                                            count++;
+                                            if (count == 4) {
+                                                linearLayout.addView(format);
+                                                count = 1;
+                                                layoutInflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                                                format = layoutInflater.inflate(R.layout.grid_layout, null);
+                                                imageView1 = format.findViewById(R.id.imageView2);
+                                                imageView2 = format.findViewById(R.id.imageView3);
+                                                imageView3 = format.findViewById(R.id.imageView4);
+                                            }
+                                            if (count == 1) {
+                                                imageView1.setImageBitmap(bitmap);
+                                                Log.i("success", "done:1");
+                                            } else if (count == 2) {
+                                                imageView2.setImageBitmap(bitmap);
+                                                Log.i("success", "done:2");
+                                            } else {
+                                                imageView3.setImageBitmap(bitmap);
+                                                Log.i("success", "done:3");
+                                            }
+                                        }
+                                        else{
+                                            Log.i("data error", e.getMessage());
+                                        }
+                                        temp++;
+                                    }
+                                });
+                                while(j==temp) { }
+
+                                 */
+
+                            } catch (Exception ex) {
+//                                ex.printStackTrace();
+                                Log.i("data error", ex.getMessage());
+//                                Toast.makeText(getActivity(), ex.getMessage(), Toast.LENGTH_SHORT).show();
                             }
 
                             /*
