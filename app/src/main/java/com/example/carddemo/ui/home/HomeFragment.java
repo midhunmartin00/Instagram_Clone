@@ -17,6 +17,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -52,7 +53,7 @@ public class HomeFragment extends Fragment {
         ParseQuery<ParseObject> query=ParseQuery.getQuery("image");
         query.whereNotEqualTo("username", ParseUser.getCurrentUser().getUsername());
         query.orderByDescending("username");
-        Log.i("success", "done: ");
+        Log.i("success", ParseUser.getCurrentUser().getUsername());
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> objects, ParseException e) {
@@ -67,7 +68,7 @@ public class HomeFragment extends Fragment {
                                         Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
                                         try {
                                             DisplayMetrics metrics = Resources.getSystem().getDisplayMetrics();
-                                            float px = 10 * (metrics.densityDpi / 160f);
+                                            float px = 5 * (metrics.densityDpi / 160f);
                                             LayoutInflater layoutInflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                                             View view = layoutInflater.inflate(R.layout.format_layout, null);
 
@@ -79,7 +80,7 @@ public class HomeFragment extends Fragment {
 
                                             imageView.setMaxHeight(imageView.getWidth());
                                             imageView.setMinimumHeight(imageView.getWidth());
-                                            CardView.LayoutParams layoutParams = new CardView.LayoutParams(CardView.LayoutParams.MATCH_PARENT, CardView.LayoutParams.WRAP_CONTENT);
+                                            ConstraintLayout.LayoutParams layoutParams = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT);
                                             layoutParams.setMargins(0, (int) px, 0, 0);
                                             view.setLayoutParams(layoutParams);
                                             linearLayout.addView(view);
@@ -95,6 +96,10 @@ public class HomeFragment extends Fragment {
                             });
                         }
                     }
+                    Log.i("error", "empty");
+                }
+                else{
+                    Log.i("error",e.getMessage());
                 }
             }
         });
