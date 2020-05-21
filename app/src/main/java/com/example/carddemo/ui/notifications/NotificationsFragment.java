@@ -24,8 +24,10 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.viewpager.widget.ViewPager;
 
 import com.example.carddemo.R;
+import com.google.android.material.tabs.TabLayout;
 import com.parse.FindCallback;
 import com.parse.GetDataCallback;
 import com.parse.ParseException;
@@ -42,15 +44,8 @@ import java.util.List;
 public class NotificationsFragment extends Fragment {
 
 //    private NotificationsViewModel notificationsViewModel;
-    private LinearLayout linearLayout;
-    private LayoutInflater layoutInflater;
-    private View format;
-    private int count=0;
-    private ImageView imageView1;
-    private ImageView imageView2;
-    private ImageView imageView3;
-    private ImageView imageView;
-    private int temp=0;
+    TabLayout tabLayout;
+    ViewPager viewPager;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -68,186 +63,29 @@ public class NotificationsFragment extends Fragment {
 //                textView.setText(s);
 //            }
 //        });
-        linearLayout=root.findViewById(R.id.linearLayout);
 
-        ParseQuery<ParseObject> query=ParseQuery.getQuery("image");
-        query.whereEqualTo("username",ParseUser.getCurrentUser().getUsername());
-        query.orderByAscending("createdAt");
-        count=0;
-        layoutInflater= (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        format= layoutInflater.inflate(R.layout.new_format,null);
-        imageView1=format.findViewById(R.id.imageView1);
-        imageView2=format.findViewById(R.id.imageView2);
-        imageView3=format.findViewById(R.id.imageView3);
-        query.findInBackground(new FindCallback<ParseObject>() {
-            @SuppressLint("CutPasteId")
+        tabLayout=root.findViewById(R.id.tabLayout);
+        viewPager=root.findViewById(R.id.viewPager);
+        PageAdapter pageAdapter=new PageAdapter(getParentFragmentManager(),tabLayout.getTabCount());
+        viewPager.setAdapter(pageAdapter);
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
-            public void done(List<ParseObject> objects, ParseException e) {
-                if(e==null) {
-                    if (objects.size() > 0) {
-                        int j=0;
-                        for (ParseObject ob : objects) {
-                            ParseFile parseFile = ob.getParseFile("image");
-                            Log.i("file", parseFile.toString());
-                            try {
-                                assert parseFile != null;
-                                byte[] data= parseFile.getData();
-                                Bitmap bitmap=BitmapFactory.decodeByteArray(data,0,data.length);
-                                Log.i("bitmap", bitmap.toString());
-//                                InputStream in= parseFile.getDataStream();
-//                                BufferedInputStream bufferedInputStream=new BufferedInputStream(in);
-//                                Bitmap bitmap=BitmapFactory.decodeStream(bufferedInputStream);
-                                count++;
-                                if (count == 4) {
-
-                                    DisplayMetrics metrics = Resources.getSystem().getDisplayMetrics();
-                                    float px = 1 * (metrics.densityDpi / 160f);
-                                    ConstraintLayout.LayoutParams layoutParams=new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT,ConstraintLayout.LayoutParams.WRAP_CONTENT);
-                                    layoutParams.setMargins(0, (int) px,0,0);
-                                    format.setLayoutParams(layoutParams);
-                                    linearLayout.addView(format);
-
-                                    count = 1;
-                                    layoutInflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                                    format = layoutInflater.inflate(R.layout.new_format, null);
-                                    imageView1 = format.findViewById(R.id.imageView1);
-                                    imageView2 = format.findViewById(R.id.imageView2);
-                                    imageView3 = format.findViewById(R.id.imageView3);
-                                }
-                                if (count == 1) {
-                                    imageView1.setImageBitmap(bitmap);
-                                    Log.i("success", "done:1");
-                                } else if (count == 2) {
-                                    imageView2.setImageBitmap(bitmap);
-                                    Log.i("success", "done:2");
-                                } else {
-                                        imageView3.setImageBitmap(bitmap);
-                                        Log.i("success", "done:3");
-                                }
-
-
-                                /*
-                                parseFile.getDataInBackground(new GetDataCallback() {
-                                    @Override
-                                    public void done(byte[] data, ParseException e) {
-                                        if(e==null) {
-                                            Log.i("data", Arrays.toString(data));
-                                            Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
-                                            count++;
-                                            if (count == 4) {
-                                                linearLayout.addView(format);
-                                                count = 1;
-                                                layoutInflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                                                format = layoutInflater.inflate(R.layout.grid_layout, null);
-                                                imageView1 = format.findViewById(R.id.imageView2);
-                                                imageView2 = format.findViewById(R.id.imageView3);
-                                                imageView3 = format.findViewById(R.id.imageView4);
-                                            }
-                                            if (count == 1) {
-                                                imageView1.setImageBitmap(bitmap);
-                                                Log.i("success", "done:1");
-                                            } else if (count == 2) {
-                                                imageView2.setImageBitmap(bitmap);
-                                                Log.i("success", "done:2");
-                                            } else {
-                                                imageView3.setImageBitmap(bitmap);
-                                                Log.i("success", "done:3");
-                                            }
-                                        }
-                                        else{
-                                            Log.i("data error", e.getMessage());
-                                        }
-                                        temp++;
-                                    }
-                                });
-                                while(j==temp) { }
-
-                                 */
-
-                            } catch (Exception ex) {
-//                                ex.printStackTrace();
-                                Log.i("data error", ex.getMessage());
-//                                Toast.makeText(getActivity(), ex.getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-
-
-                            /*
-                            parseFile.getDataInBackground(new GetDataCallback() {
-                                @Override
-                                public void done(byte[] data, ParseException e) {
-                                    if(e==null && data!=null) {
-                                        Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
-                                        count++;
-                                        if(count==4){
-                                            linearLayout.addView(format);
-                                            count=1;
-                                            layoutInflater= (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                                            format=layoutInflater.inflate(R.layout.grid_layout,null);
-                                            imageView1=format.findViewById(R.id.imageView2);
-                                            imageView2=format.findViewById(R.id.imageView3);
-                                            imageView3=format.findViewById(R.id.imageView4);
-                                        }
-                                        try {
-                                            if(count==1) {
-                                                imageView1.setImageBitmap(bitmap);
-                                                Log.i("success", "done:1");
-                                                cardView=(CardView) format.findViewWithTag("5");
-                                                cardView.setVisibility(View.INVISIBLE);
-                                                cardView=(CardView) format.findViewWithTag("6");
-                                                cardView.setVisibility(View.INVISIBLE);
-                                                linearLayout.addView(format);
-                                            }
-                                            else if(count==2) {
-                                                imageView2.setImageBitmap(bitmap);
-                                                Log.i("success", "done:2");
-                                            }
-                                            else {
-                                                imageView3.setImageBitmap(bitmap);
-                                                Log.i("success", "done:3");
-                                            }
-                                        } catch (Exception e1) {
-                                            Log.i("error", "done: " + e1.getMessage());
-                                            Log.i("error", "count= "+ Integer.toString(count));
-                                        }
-                                    }
-                                }
-                            });
-
-                             */
-                        }
-                            Log.i("count", Integer.toString(count));
-                        try {
-
-                            DisplayMetrics metrics = Resources.getSystem().getDisplayMetrics();
-                            float px = 1 * (metrics.densityDpi / 160f);
-                            ConstraintLayout.LayoutParams layoutParams = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT);
-                            layoutParams.setMargins(0, (int) px, 0, 0);
-                            format.setLayoutParams(layoutParams);
-                            if (count == 1) {
-                                imageView = (ImageView) format.findViewById(R.id.imageView2);
-                                imageView.setVisibility(View.INVISIBLE);
-                                imageView = (ImageView) format.findViewById(R.id.imageView3);
-                                imageView.setVisibility(View.INVISIBLE);
-                                linearLayout.addView(format);
-                            } else if (count == 2) {
-                                imageView = (ImageView) format.findViewById(R.id.imageView3);
-                                imageView.setVisibility(View.INVISIBLE);
-                                linearLayout.addView(format);
-                            } else if (count == 3) {
-                                linearLayout.addView(format);
-                            }
-                        }catch (Exception e3){
-                            Log.i("error3", e3.getMessage());
-                        }
-                    }
-                }
-                else{
-                    Log.i("error", e.getMessage());
-                    Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                }
+            public void onTabSelected(TabLayout.Tab tab) {
+                viewPager.setCurrentItem(tab.getPosition());
             }
 
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
         });
+
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
 
         return root;
     }
